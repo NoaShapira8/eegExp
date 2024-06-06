@@ -29,24 +29,15 @@ class CustomDataset(Dataset):
 class CustomDNN(nn.Module):
     def __init__(self):
         super(CustomDNN, self).__init__()
-        self.fc1 = nn.Linear(1792, 1024)
-        self.fc2 = nn.Linear(1024, 512)
-        self.fc3 = nn.Linear(512, 256)
-        self.fc4 = nn.Linear(256, 128)
-        self.fc5 = nn.Linear(128, 3)
-        self.threshold = nn.Threshold(0, 0)  # Thresholding function
-        self.elu = nn.ELU()
-        self.hardsigmoid = nn.Hardsigmoid()
-        self.sigmoid = nn.Sigmoid()
+        self.fc1 = nn.Linear(1792, 256)
+        self.fc2 = nn.Linear(256, 128)
+        self.fc3 = nn.Linear(128, 3)
         self.relu = nn.ReLU()
-        self.softmax = nn.Softmax(dim=1)
 
     def forward(self, x):
         x = self.relu(self.fc1(x))
         x = self.relu(self.fc2(x))
-        x = self.relu(self.fc3(x))
-        x = self.relu(self.fc4(x))
-        x = self.fc5(x)
+        x = self.fc3(x)
         return x
 
 
@@ -105,7 +96,7 @@ model = CustomDNN()
 
 # Define the loss function (Mean Squared Error) and optimizer Adam
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.01)
+optimizer = optim.Adam(model.parameters(), lr=0.005)
 
 train_losses = []
 val_losses = []
